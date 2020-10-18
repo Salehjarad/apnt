@@ -3,3 +3,4 @@ prisma/.env
 prisma/dev.db
 prisma/migrations
 yarn.lock
+.vscode
