@@ -14,7 +14,7 @@ input IntFilter {
 }
 
 type Mutation {
-  createOnePost(data: PostCreateInput!): Post!
+  addNewPost(by: Int!, content: String!, image: Upload, title: String!): Post!
   createOneUser(data: UserCreateInput!): User!
   deleteOnePost(where: PostWhereUniqueInput!): Post
   updateOnePost(data: PostUpdateInput!, where: PostWhereUniqueInput!): Post
@@ -46,16 +46,29 @@ input NestedStringFilter {
   startsWith: String
 }
 
+input NestedStringNullableFilter {
+  contains: String
+  endsWith: String
+  equals: String
+  gt: String
+  gte: String
+  in: [String!]
+  lt: String
+  lte: String
+  not: NestedStringNullableFilter
+  notIn: [String!]
+  startsWith: String
+}
+
+input NullableStringFieldUpdateOperationsInput {
+  set: String
+}
+
 type Post {
   author: User!
   content: String!
   id: Int!
-  title: String!
-}
-
-input PostCreateInput {
-  author: UserCreateOneWithoutPostsInput!
-  content: String!
+  imgUrl: String
   title: String!
 }
 
@@ -66,6 +79,7 @@ input PostCreateManyWithoutAuthorInput {
 
 input PostCreateWithoutAuthorInput {
   content: String!
+  imgUrl: String
   title: String!
 }
 
@@ -74,6 +88,7 @@ input PostScalarWhereInput {
   authorId: IntFilter
   content: StringFilter
   id: IntFilter
+  imgUrl: StringNullableFilter
   NOT: [PostScalarWhereInput!]
   OR: [PostScalarWhereInput!]
   title: StringFilter
@@ -82,11 +97,13 @@ input PostScalarWhereInput {
 input PostUpdateInput {
   author: UserUpdateOneRequiredWithoutPostsInput
   content: StringFieldUpdateOperationsInput
+  imgUrl: NullableStringFieldUpdateOperationsInput
   title: StringFieldUpdateOperationsInput
 }
 
 input PostUpdateManyDataInput {
   content: StringFieldUpdateOperationsInput
+  imgUrl: NullableStringFieldUpdateOperationsInput
   title: StringFieldUpdateOperationsInput
 }
 
@@ -109,6 +126,7 @@ input PostUpdateManyWithWhereNestedInput {
 
 input PostUpdateWithoutAuthorDataInput {
   content: StringFieldUpdateOperationsInput
+  imgUrl: NullableStringFieldUpdateOperationsInput
   title: StringFieldUpdateOperationsInput
 }
 
@@ -152,6 +170,23 @@ input StringFilter {
   startsWith: String
 }
 
+input StringNullableFilter {
+  contains: String
+  endsWith: String
+  equals: String
+  gt: String
+  gte: String
+  in: [String!]
+  lt: String
+  lte: String
+  not: NestedStringNullableFilter
+  notIn: [String!]
+  startsWith: String
+}
+
+"""The `Upload` scalar type represents a file upload."""
+scalar Upload
+
 type User {
   email: String!
   id: Int!
@@ -163,11 +198,6 @@ input UserCreateInput {
   email: String!
   posts: PostCreateManyWithoutAuthorInput
   username: String!
-}
-
-input UserCreateOneWithoutPostsInput {
-  connect: UserWhereUniqueInput
-  create: UserCreateWithoutPostsInput
 }
 
 input UserCreateWithoutPostsInput {
